@@ -5,9 +5,12 @@
   "author": "shadowcodex <jsduncan98@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "start": "node index.js",
     "postinstall": "node fixWeb3.js"
   },
   "dependencies": {
-    "web3": "1.0.0-beta.34"
+    "csv": "^5.1.1",
+    "web3": "1.0.0-beta.34",
+    "yargs": "^13.2.2"
   }
 }
