@@ -40,13 +40,31 @@ const records = parse(input, {
   skip_empty_lines: true,
 });
 
-const processAccount = async record => {
+const processAccount = async (record, web3) => {
   console.log('Processing', record.address, 'for amount of', record.amount);
+
+  // check balances before
+  const balance = await web3.eth.getBalance(record.address);
+  const srcBalance = await web3.eth.getBalance(config.srcAccount);
+  console.log('Pre airdrop balance (target, source): (', balance, ',', srcBalance, ')');
+
+  // do airdrop
+  // const tx = await web3.eth.send...
+
+  const balance2 = await web3.eth.getBalance(record.address);
+  const srcBalance2 = await web3.eth.getBalance(config.srcAccount);
+  console.log('Post airdrop balance (targe, source): (', balance2, ',', srcBalance2, ')');
+
+  if (balance + Number(record.amount) !== balance2) {
+    console.log('### ERROR BALANCE INCORRECT');
+  }
 };
 
 const run = async () => {
   // console.log(records);
   // console.log(records.length);
+  const Web3 = require('web3');
+  const web3 = new Web3(config.rpcUrl);
 
   let accounts = {};
 
@@ -57,7 +75,7 @@ const run = async () => {
     if (!accounts[records[i].address]) {
       accounts[records[i].address] = true;
       duplicateSum += Number(records[i].amount);
-      await processAccount(records[i]);
+      await processAccount(records[i], web3);
     }
   }
 
