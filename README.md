@@ -22,6 +22,12 @@ yarn start --config ./config.example --csv ./csv.example
 
 Replacing the example files with the files of your choice. Make sure to put the path correctly.
 
+**IMPORTANT**
+
+There are a couple of times the program gives the better opportunity to stop it using `ctrl+c` These are after it validates data, and when a transfer fails. It will wait 5 seconds for you to cancel it and if you don't it will move one.
+
+If you cancel an airdrop in progress, you will need to remove the accounts from the csv file that you have already processed. You can find these in the output log the program creates.
+
 ## Recommended Dry Run
 
 You can do a dry run by connecting to the Halo Platform testnet or Eth Rinkeby. This is recommended so that you can find any issues in your config or csv before running against a live chain.
