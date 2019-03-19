@@ -3,8 +3,6 @@ const logFile = 'output-' + Date.now() + '.log';
 const stream = fs.createWriteStream(logFile, { flags: 'a' });
 
 function log() {
-  // const args = Array.prototype.slice.call(arguments);
-
   console.log(...arguments);
   stream.write([...arguments].join(' ') + '\n');
 }
