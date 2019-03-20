@@ -4,14 +4,6 @@ Simple airdrop script for Halo Platform, Ethereum, or Ethereum like chains.
 
 Uses a single csv file with addresses and amounts, as well as a config file for inputting source account and network information.
 
-# Examples
-
-There are two config examples in the repo.
-
-The csv should be done in `<amount>,<address>` form. Where amount is a whole unit of Halo or ethereum. If you wish to send fractions uses decimals. You must leave the top line unchanged as it is used to pares the csv into correct js objects.
-
-The config should have the url for which you will use for your RPC (Either localhost for full node locally, infura for eth remote, or halo rpc for Halo Platform), and it should also have the public address and private key for the account you wish to send from.
-
 # Install
 
 ```
@@ -36,6 +28,14 @@ There are a couple of times the program gives the better opportunity to stop it 
 
 If you cancel an airdrop in progress, you will need to remove the accounts from the csv file that you have already processed. You can find these in the output log the program creates.
 
-## Recommended Dry Run
+# Recommended Dry Run
 
 You can do a dry run by connecting to the Halo Platform testnet or Eth Rinkeby. This is recommended so that you can find any issues in your config or csv before running against a live chain.
+
+# Examples
+
+There are two config examples in the repo.
+
+The csv should be done in `<amount>,<address>` form. Where amount is a whole unit of Halo or ethereum. If you wish to send fractions uses decimals. You must leave the top line unchanged as it is used to pares the csv into correct js objects.
+
+The config should have the url for which you will use for your RPC (Either localhost for full node locally, infura for eth remote, or halo rpc for Halo Platform), and it should also have the public address and private key for the account you wish to send from.
