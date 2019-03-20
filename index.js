@@ -2,16 +2,18 @@ const fs = require('fs');
 const logFile = 'output-' + Date.now() + '.log';
 const stream = fs.createWriteStream(logFile, { flags: 'a' });
 
-function log() {
-  console.log(...arguments);
-  stream.write([...arguments].join(' ') + '\n');
-}
+const captains = {
+  log: function() {
+    console.log(...arguments);
+    stream.write([...arguments].join(' ') + '\n');
+  },
+};
 
 const argv = require('yargs').argv;
 
 const argExit = error => {
-  log('Error:', error);
-  log('Required syntax is: yarn start --config <configpath> --csv <csvpath>');
+  captains.log('Error:', error);
+  captains.log('Required syntax is: yarn start --config <configpath> --csv <csvpath>');
   process.exit(1);
 };
 
@@ -26,8 +28,8 @@ let config;
 try {
   config = require(argv.config);
 } catch (e) {
-  log('Failed to import config file...');
-  log(e.message, e.stack);
+  captains.log('Failed to import config file...');
+  captains.log(e.message, e.stack);
   process.exit(1);
 }
 
@@ -36,8 +38,8 @@ let input;
 try {
   input = fs.readFileSync(argv.csv);
 } catch (e) {
-  log('Failed to import csv file...');
-  log(e.message, e.stack);
+  captains.log('Failed to import csv file...');
+  captains.log(e.message, e.stack);
   process.exit(1);
 }
 
@@ -59,12 +61,12 @@ const sleep = time => {
 };
 
 const processAccount = async (count, record, web3) => {
-  log('Processing (', count, ')', record.address, 'for amount of', record.amount);
+  captains.log('Processing (', count, ')', record.address, 'for amount of', record.amount);
 
   // check balances before
   const balance = new BigNumber(web3.utils.fromWei(await web3.eth.getBalance(record.address), 'ether'));
   const srcBalance = new BigNumber(web3.utils.fromWei(await web3.eth.getBalance(config.srcAccount), 'ether'));
-  log('Pre airdrop balance (target, source): (', balance.toString(), ',', srcBalance.toString(), ')');
+  captains.log('Pre airdrop balance (target, source): (', balance.toString(), ',', srcBalance.toString(), ')');
 
   // do airdrop
   let tx = {
@@ -76,30 +78,30 @@ const processAccount = async (count, record, web3) => {
 
   const response = await sss.signAndSend(tx, web3.eth.accounts.wallet[0].privateKey, web3, false);
 
-  log(JSON.stringify(response));
+  captains.log(JSON.stringify(response));
 
   const balance2 = new BigNumber(web3.utils.fromWei(await web3.eth.getBalance(record.address), 'ether'));
   const srcBalance2 = new BigNumber(web3.utils.fromWei(await web3.eth.getBalance(config.srcAccount), 'ether'));
-  log('Post airdrop balance (targe, source): (', balance2.toString(), ',', srcBalance2.toString(), ')');
+  captains.log('Post airdrop balance (targe, source): (', balance2.toString(), ',', srcBalance2.toString(), ')');
 
   if (!balance.plus(record.amount).eq(balance2)) {
-    log('###########################');
-    log('### ERROR BALANCE INCORRECT');
-    log('###########################');
+    captains.log('###########################');
+    captains.log('### ERROR BALANCE INCORRECT');
+    captains.log('###########################');
     await sleep(5000);
   }
 
   if (!srcBalance.minus(record.amount).eq(srcBalance2)) {
-    log('###########################');
-    log('### ERROR BALANCE INCORRECT');
-    log('###########################');
+    captains.log('###########################');
+    captains.log('### ERROR BALANCE INCORRECT');
+    captains.log('###########################');
     await sleep(5000);
   }
 };
 
 const run = async () => {
-  // log(records);
-  // log(records.length);
+  // captains.log(records);
+  // captains.log(records.length);
   const Web3 = require('web3');
   const web3 = new Web3(config.rpcUrl);
   web3.eth.accounts.wallet.add(config.srcPrivateKey);
@@ -117,10 +119,10 @@ const run = async () => {
     if (!accounts[records[i].address]) {
       if (!web3.utils.isAddress(records[i].address)) {
         valid = false;
-        log('Bad ADDRESS:', records[i].address, 'skipping address...');
+        captains.log('Bad ADDRESS:', records[i].address, 'skipping address...');
       } else if (Number.isNaN(records[i].amount) || Number(records[i].amount) <= 0) {
         valid = false;
-        log('Bad AMOUNT:', records[i].address, records[i].amount, 'skipping address...');
+        captains.log('Bad AMOUNT:', records[i].address, records[i].amount, 'skipping address...');
       } else {
         goodAccounts.push(records[i]);
         accounts[records[i].address] = true;
@@ -130,21 +132,21 @@ const run = async () => {
   }
 
   if (valid === false) {
-    log('##########################################################');
-    log(
+    captains.log('##########################################################');
+    captains.log(
       'There were bad addresses, stop program if you wish to fix, otherwise continuing and skipping those payouts...'
     );
-    log('##########################################################');
+    captains.log('##########################################################');
     await sleep(5000);
   }
 
-  log('Source Account Pre Airdrop Balance:', theSrcBalance.toString());
-  log('Total Addresses:', records.length);
-  log('Total Amount:', sum);
-  log('Total Addresses After Duplciate Removal:', goodAccounts.length);
-  log('Total Amount After Duplicate Removal:', duplicateSum);
+  captains.log('Source Account Pre Airdrop Balance:', theSrcBalance.toString());
+  captains.log('Total Addresses:', records.length);
+  captains.log('Total Amount:', sum);
+  captains.log('Total Addresses After Duplciate Removal:', goodAccounts.length);
+  captains.log('Total Amount After Duplicate Removal:', duplicateSum);
 
-  log('Starting payout in 5 seconds');
+  captains.log('Starting payout in 5 seconds');
 
   await sleep(5000);
 
@@ -154,14 +156,14 @@ const run = async () => {
 
   const theSrcBalance2 = new BigNumber(web3.utils.fromWei(await web3.eth.getBalance(config.srcAccount), 'ether'));
 
-  log('Total Paid To Address:', theSrcBalance.minus(theSrcBalance2).toString());
+  captains.log('Total Paid To Address:', theSrcBalance.minus(theSrcBalance2).toString());
 };
 
 run()
   .then(() => {
-    log('Program finished...');
+    captains.log('Program finished...');
     stream.end();
   })
   .catch(e => {
-    log('Uncaught error in program run: ', e.message, e.stack);
+    captains.log('Uncaught error in program run: ', e.message, e.stack);
   });
