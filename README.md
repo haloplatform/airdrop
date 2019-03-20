@@ -24,7 +24,7 @@ Replacing the example files with the files of your choice. Make sure to put the 
 
 :warning: **IMPORTANT** :warning:
 
-There are a couple of times the program gives the better opportunity to stop it using `ctrl+c` These are after it validates data, and when a transfer fails. It will wait 5 seconds for you to cancel it and if you don't it will move one.
+There are a couple of times the program gives the better opportunity to stop it using `ctrl+c` These are after it validates data, and when a transfer fails. It will wait 5 seconds for you to cancel it and if you don't it will move on.
 
 _**If you cancel an airdrop in progress, you will need to remove the accounts from the csv file that you have already processed. You can find these in the output log the program creates.**_
 
