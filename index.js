@@ -82,7 +82,7 @@ const processAccount = async (count, record, web3) => {
 
   const balance2 = new BigNumber(web3.utils.fromWei(await web3.eth.getBalance(record.address), 'ether'));
   const srcBalance2 = new BigNumber(web3.utils.fromWei(await web3.eth.getBalance(config.srcAccount), 'ether'));
-  captains.log('Post airdrop balance (targe, source): (', balance2.toString(), ',', srcBalance2.toString(), ')');
+  captains.log('Post airdrop balance (target, source): (', balance2.toString(), ',', srcBalance2.toString(), ')');
 
   if (!balance.plus(record.amount).eq(balance2)) {
     captains.log('###########################');
@@ -156,7 +156,7 @@ const run = async () => {
 
   const theSrcBalance2 = new BigNumber(web3.utils.fromWei(await web3.eth.getBalance(config.srcAccount), 'ether'));
 
-  captains.log('Total Paid To Address:', theSrcBalance.minus(theSrcBalance2).toString());
+  captains.log('Total Paid To Addresses:', theSrcBalance.minus(theSrcBalance2).toString());
 };
 
 run()
