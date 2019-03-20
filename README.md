@@ -12,6 +12,14 @@ The csv should be done in `<amount>,<address>` form. Where amount is a whole uni
 
 The config should have the url for which you will use for your RPC (Either localhost for full node locally, infura for eth remote, or halo rpc for Halo Platform), and it should also have the public address and private key for the account you wish to send from.
 
+# Install
+
+```
+git clone https://github.com/haloplatform/airdrop.git \
+&& cd airdrop \
+&& yarn
+```
+
 # Running
 
 To run the airdrop, after you have your config and csv file in the folder simply do:
